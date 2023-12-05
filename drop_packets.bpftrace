@@ -1,0 +1,19 @@
+#!/usr/sbin/bpftrace
+
+BEGIN
+{
+  printf("Dropping packets...\n");
+}
+
+kprobe:net:dev_queue_xmit
+{
+  $skb = arg1;
+  $iph = (struct iphdr *)skb->data;
+
+  // Specify your condition for dropping packets here
+  // For example, drop all packets with a specific destination IP address
+  if ($iph->daddr == 0x0a000001) {
+    $ret = -1;
+    $return = $ret;
+  }
+}

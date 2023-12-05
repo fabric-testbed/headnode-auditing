@@ -1,0 +1,6 @@
+#!/usr/sbin/bpftrace
+
+tracepoint:syscalls:sys_enter_openat
+{
+  printf("Openat called. File path: %s\n", str(args->filename));
+}
